@@ -52,7 +52,27 @@ CREATE TABLE user_auth(
 | auth_hash   | 密码的哈希运算结果 |
 | update_date | 上次更新时间       |
 
-### 配送员信息表
+### 配送员信息表(couriers_info)
+
+存储着已通过验证的配送员信息
+
+```mysql
+CREATE TABLE couries_info(
+	uid INT UNSIGNED NOT NULL PRIMARY KEY,
+    passport_front TINYTEXT NOT NULL,
+    passport_detail TINYTEXT NOT NULL,
+    operator_id INT UNSIGNED NOT NULL,
+    pass_date DATETIME NOT NULL
+)Engine=InnoDB DEFAULT CHARSET=UTF8MB4
+```
+
+| 字段            | 说明             |
+| --------------- | ---------------- |
+| uid             | 用户标识符       |
+| passport_front  | 学生证校训钢印页 |
+| passport_detail | 学生证个人信息页 |
+| operator_uid    | 操作者uid        |
+| pass_date       | 通过时间         |
 
 
 
