@@ -10,12 +10,12 @@
 
 ```mysql
 CREATE TABLE user_detail(
-	uid INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    uid INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     phone INT UNSIGNED NOT NULL UNIQUE,
     nick TINYTEXT NOT NULL,
     name TINYTEXT NOT NULL,
     avatar TINYTEXT NOT NULL,
-    register_date DATETIME NOT NULL,
+    register_date TIMESTAMP NOT NULL,
     state TINYINT NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
@@ -40,7 +40,7 @@ CREATE TABLE user_auth(
     phone INT UNSIGNED NOT NULL UNIQUE,
     auth_salt TINYTEXT NOT NULL,
     auth_hash TINYTEXT NOT NULL,
-    update_date DATETIME NOT NULL
+    update_date TIMESTAMP NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
@@ -62,7 +62,7 @@ CREATE TABLE couries_info(
     passport_front TINYTEXT NOT NULL,
     passport_detail TINYTEXT NOT NULL,
     operator_id INT UNSIGNED NOT NULL,
-    pass_date DATETIME NOT NULL
+    accept_date TIMESTAMP NOT NULL
 )Engine=InnoDB DEFAULT CHARSET=UTF8MB4
 ```
 
@@ -72,7 +72,7 @@ CREATE TABLE couries_info(
 | passport_front  | 学生证校训钢印页 |
 | passport_detail | 学生证个人信息页 |
 | operator_uid    | 操作者uid        |
-| pass_date       | 通过时间         |
+| accept_datel    | 通过时间         |
 
 
 
@@ -84,7 +84,7 @@ CREATE TABLE couries_info(
 CREATE TABLE access_code(
     phone INT UNSIGNED NOT NULL,
     vcode tinytext NOT NULL,
-    ctime BIGINT UNSIGNED NOT NULL,
+    ctime TIMESTAMP NOT NULL,
     INDEX(phone)
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
@@ -102,7 +102,7 @@ CREATE TABLE access_code(
 CREATE TABLE recover_code(
     phone INT UNSIGNED NOT NULL,
     vcode tinytext NOT NULL,
-    ctime BIGINT UNSIGNED NOT NULL,
+    ctime TIMESTAMP NOT NULL,
     INDEX(phone)
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
