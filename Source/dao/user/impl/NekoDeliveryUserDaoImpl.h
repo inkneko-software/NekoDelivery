@@ -3,9 +3,10 @@
 class NekoDeliveryUserDaoImpl : public NekoDeliveryUserDao, private MySQLBaseDao
 {
 public:
-	NekoDeliveryUserDaoImpl()
+	NekoDeliveryUserDaoImpl(std::string host, unsigned short port, std::string user, std::string password, size_t maintainSize)
+		: MySQLBaseDao(host, port, user, password, maintainSize)
 	{
-	
+		
 	}
 
 	void registerAccount();

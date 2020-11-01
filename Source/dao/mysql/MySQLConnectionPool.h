@@ -22,7 +22,6 @@ class MySQLConnectionPool
 public:
 	MySQLConnectionPool() : ptrDriver(sql::mysql::get_driver_instance()) {}
 
-
 	void init(std::string host, unsigned short port, std::string user, std::string password, size_t maintainSize) noexcept(true);
 
 	PtrConnection getConnection() noexcept(false);

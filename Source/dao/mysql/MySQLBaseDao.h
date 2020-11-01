@@ -3,6 +3,11 @@
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 #include <cppconn/resultset.h>
+
+using PtrStatement = std::shared_ptr<sql::Statement>;
+using PtrPreParedStatement = std::shared_ptr<sql::PreparedStatement>;
+using PtrResultSet = std::shared_ptr<sql::ResultSet>;
+
 class MySQLBaseDao
 {
 	MySQLConnectionPool pool;
@@ -12,5 +17,5 @@ public:
 		pool.init(host, port, user, password, maintainSize);
 	}
 
-	sql::ResultSet* execueteQuery(std::string db, std::string st) noexcept(false);
+	PtrResultSet execueteQuery(std::string db, std::string st) noexcept(false);
 };

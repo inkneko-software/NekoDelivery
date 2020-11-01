@@ -5,6 +5,7 @@ void NekoDeliveryUserDaoImpl::registerAccount()
 
 void NekoDeliveryUserDaoImpl::saveUserDetail(const UserDetail& userDetail)
 {
+
 }
 
 UserDetail NekoDeliveryUserDaoImpl::getUserDetailByUid(unsigned int uid)
