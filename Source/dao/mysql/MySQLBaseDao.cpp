@@ -17,7 +17,7 @@ bool MySQLBaseDao::execute(std::string db, std::string statement) noexcept(false
 		throw e;
 	}
 }
-PtrResultSet MySQLBaseDao::execueteQuery(std::string db, std::string st) noexcept(false)
+PtrResultSet MySQLBaseDao::executeQuery(std::string db, std::string st) noexcept(false)
 {
 	PtrConnection conn(pool.getConnection());
 	try 
@@ -35,7 +35,7 @@ PtrResultSet MySQLBaseDao::execueteQuery(std::string db, std::string st) noexcep
 	}
 }
 
-PtrResultSet MySQLBaseDao::execueteQuery(std::string db, std::string preparedStatement, std::function<void(PtrPreParedStatement pstm)> adapter) noexcept(false)
+PtrResultSet MySQLBaseDao::executeQuery(std::string db, std::string preparedStatement, std::function<void(PtrPreParedStatement pstm)> adapter) noexcept(false)
 {
 	PtrConnection conn(pool.getConnection());
 	try

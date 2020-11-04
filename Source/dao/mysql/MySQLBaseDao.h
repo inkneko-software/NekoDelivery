@@ -21,8 +21,8 @@ public:
 
 	bool execute(std::string db, std::string statement) noexcept(false);
 
-	PtrResultSet execueteQuery(std::string db, std::string statement) noexcept(false);
-	PtrResultSet execueteQuery(std::string db, std::string preparedStatement, std::function<void(PtrPreParedStatement pstm)> adapter) noexcept(false);
+	PtrResultSet executeQuery(std::string db, std::string statement) noexcept(false);
+	PtrResultSet executeQuery(std::string db, std::string preparedStatement, std::function<void(PtrPreParedStatement pstm)> adapter) noexcept(false);
 
 	size_t executeUpdate(std::string db, std::string statement) noexcept(false);
 	size_t executeUpdate(std::string db, std::string statement, std::function<void(PtrPreParedStatement pstm)> adapter) noexcept(false);

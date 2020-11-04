@@ -1,6 +1,7 @@
 #include "NekoDeliveryUserDaoImpl.h"
 void NekoDeliveryUserDaoImpl::registerAccount()
 {
+	execueteQuery()
 }
 
 void NekoDeliveryUserDaoImpl::saveUserDetail(const UserDetail& userDetail)
