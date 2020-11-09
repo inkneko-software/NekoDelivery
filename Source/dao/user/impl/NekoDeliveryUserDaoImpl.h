@@ -9,21 +9,68 @@ public:
 		
 	}
 
-	void registerAccount();
-	void saveUserDetail(const UserDetail& userDetail);
-	UserDetail getUserDetailByUid(unsigned int uid);
-	UserDetail getUserDetailByPhone(unsigned int phone);
+	/*
+	* 注册用户
+	*/
+	void registerAccount(const UserDetail& userDetail, const UserAuth& userAuth) noexcept(false);
 
-	void saveUserAuth(const UserAuth& userAUth);
-	UserAuth getUserAuthByUid(unsigned int uid);
-	UserAuth getUserAuthByPhone(unsigned int phone);
+	/*
+	* 根据uid更新用户信息
+	*/
+	void updateUserDetail(const UserDetail& userDetail);
 
+	/*
+	* 根据uid查询用户信息
+	*/
+	std::vector<UserDetail> getUserDetailByUid(unsigned int uid);
+
+	/*
+	* 根据手机号查询用户信息
+	*/
+	std::vector<UserDetail> getUserDetailByPhone(unsigned int phone);
+
+	/*
+	* 根据uid更新用户认证信息
+	*/
+	void updateUserAuth(const UserAuth& userAUth);
+
+	/*
+	* 根据uid获取用户认证信息
+	*/
+	std::vector<UserAuth> getUserAuthByUid(unsigned int uid);
+
+	/*
+	* 根据手机号获取用户认证信息
+	*/
+	std::vector<UserAuth> getUserAuthByPhone(unsigned int phone);
+
+	/*
+	* 添加快递员信息
+	*/
 	void saveCourierInfo(const CouriersInfo& courierInfo);
-	CouriersInfo getCourierInfo(unsigned int uid);
 
-	void saveAccessCode(const AccessCode& userDetail);
-	AccessCode getAccessCode(unsigned int phone);
+	/*
+	* 根据uid获取快递员信息
+	*/
+	std::vector<CouriersInfo> getCourierInfo(unsigned int uid);
 
+	/*
+	* 保存认证验证码
+	*/
+	void saveAccessCode(const AccessCode& accessCode);
+
+	/*
+	* 根据手机号和指定的时间获取认证码记录
+	*/
+	std::vector<AccessCode> getAccessCode(unsigned int phone, unsigned int ctime);
+
+	/*
+	* 保存重置密码验证码
+	*/
 	void saveRecoverCode(const RecoverCode& recoverCode);
-	RecoverCode getRecoverCode(unsigned int phone);
+
+	/*
+	* 根据手机号查询重置密码验证码
+	*/
+	std::vector<RecoverCode> getRecoverCode(unsigned int phone);
 };

@@ -30,7 +30,7 @@ PtrConnection MySQLConnectionPool::getConnection() noexcept(false)
 		{
 			if (connpool.size() == 0)
 			{
-				throw std::runtime_error(std::string("failed to create connection, SQLErrorCode: ") + std::to_string(e.getErrorCode())
+				throw std::runtime_error(std::string("Failed to create connections, SQLErrorCode: ") + std::to_string(e.getErrorCode())
 					+ std::string("SQLState: ") + e.getSQLState());
 			}
 			else

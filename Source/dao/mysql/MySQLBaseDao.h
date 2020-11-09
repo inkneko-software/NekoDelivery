@@ -12,6 +12,7 @@ using PtrResultSet = std::shared_ptr<sql::ResultSet>;
 
 class MySQLBaseDao
 {
+protected:
 	MySQLConnectionPool pool;
 public:
 	MySQLBaseDao(std::string host, unsigned short port, std::string user, std::string password, size_t maintainSize)
