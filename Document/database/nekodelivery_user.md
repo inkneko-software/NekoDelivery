@@ -63,7 +63,7 @@ CREATE TABLE couries_info(
     passport_detail TINYTEXT NOT NULL,
     operator_id INT UNSIGNED NOT NULL,
     accept_date INT UNSIGNED NOT NULL
-)Engine=InnoDB DEFAULT CHARSET=UTF8MB4
+)Engine=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
 | 字段            | 说明             |

@@ -32,7 +32,7 @@ public:
 	/*
 	* 根据uid更新用户认证信息
 	*/
-	void updateUserAuth(const UserAuth& userAUth);
+	void updateUserAuth(const UserAuth& userAuth);
 
 	/*
 	* 根据uid获取用户认证信息
@@ -72,5 +72,5 @@ public:
 	/*
 	* 根据手机号查询重置密码验证码
 	*/
-	std::vector<RecoverCode> getRecoverCode(unsigned int phone);
+	std::vector<RecoverCode> getRecoverCode(unsigned int phone, unsigned int ctime);
 };
