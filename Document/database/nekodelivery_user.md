@@ -1,60 +1,60 @@
-## Ä«Ã¨ËÙµİµÄÓÃ»§Êı¾İ¿â
+## å¢¨çŒ«é€Ÿé€’çš„ç”¨æˆ·æ•°æ®åº“
 
-Êı¾İ¿âÃû³Æ£º`nekodelivery_user`
+æ•°æ®åº“åç§°ï¼š`nekodelivery_user`
 
 
 
-### ÓÃ»§ĞÅÏ¢±í(user_detail)
+### ç”¨æˆ·ä¿¡æ¯è¡¨(user_detail)
 
-´æ´¢×ÅÓÃ»§µÄ»ù´¡ĞÅÏ¢
+å­˜å‚¨ç€ç”¨æˆ·çš„åŸºç¡€ä¿¡æ¯
 
 ```mysql
 CREATE TABLE user_detail(
     uid INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    phone INT UNSIGNED NOT NULL UNIQUE,
+    phone BIGINT UNSIGNED NOT NULL UNIQUE,
     nick TINYTEXT NOT NULL,
     name TINYTEXT NOT NULL,
     avatar TINYTEXT NOT NULL,
-    register_date TIMESTAMP NOT NULL,
+    register_date INT UNSIGNED NOT NULL,
     state TINYINT NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
-| ×Ö¶Î          | ËµÃ÷               |
+| å­—æ®µ          | è¯´æ˜               |
 | ------------- | ------------------ |
-| uid           | ÓÃ»§±êÊ¶·û         |
-| phone         | ÊÖ»úºÅ             |
-| nick          | êÇ³Æ               |
-| name          | ÕæÊµĞÕÃû           |
-| avatar        | Í·ÏñÍ¼Æ¬µÄ´æ´¢Â·¾¶ |
-| register_date | ×¢²áÈÕÆÚ           |
-| state         | µ±Ç°ÕË»§×´Ì¬       |
+| uid           | ç”¨æˆ·æ ‡è¯†ç¬¦         |
+| phone         | æ‰‹æœºå·             |
+| nick          | æ˜µç§°               |
+| name          | çœŸå®å§“å           |
+| avatar        | å¤´åƒå›¾ç‰‡çš„å­˜å‚¨è·¯å¾„ |
+| register_date | æ³¨å†Œæ—¥æœŸ           |
+| state         | å½“å‰è´¦æˆ·çŠ¶æ€       |
 
-### ÈÏÖ¤ĞÅÏ¢±í(user_auth)
+### è®¤è¯ä¿¡æ¯è¡¨(user_auth)
 
-´æ´¢×ÅÓÃ»§µÄÈÏÖ¤ĞÅÏ¢
+å­˜å‚¨ç€ç”¨æˆ·çš„è®¤è¯ä¿¡æ¯
 
 ```mysql
 CREATE TABLE user_auth(
     uid INT UNSIGNED NOT NULL PRIMARY KEY,
-    phone INT UNSIGNED NOT NULL UNIQUE,
+    phone BIGINT UNSIGNED NOT NULL UNIQUE,
     auth_salt TINYTEXT NOT NULL,
     auth_hash TINYTEXT NOT NULL,
-    update_date TIMESTAMP NOT NULL
+    update_date INT UNSIGNED NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
-| ×Ö¶Î        | ËµÃ÷               |
+| å­—æ®µ        | è¯´æ˜               |
 | ----------- | ------------------ |
-| uid         | ÓÃ»§±êÊ¶·û         |
-| phone       | ÊÖ»úºÅ             |
-| auth_salt   | ¹şÏ£Ê±Ê¹ÓÃµÄÑÎ     |
-| auth_hash   | ÃÜÂëµÄ¹şÏ£ÔËËã½á¹û |
-| update_date | ÉÏ´Î¸üĞÂÊ±¼ä       |
+| uid         | ç”¨æˆ·æ ‡è¯†ç¬¦         |
+| phone       | æ‰‹æœºå·             |
+| auth_salt   | å“ˆå¸Œæ—¶ä½¿ç”¨çš„ç›     |
+| auth_hash   | å¯†ç çš„å“ˆå¸Œè¿ç®—ç»“æœ |
+| update_date | ä¸Šæ¬¡æ›´æ–°æ—¶é—´       |
 
-### ÅäËÍÔ±ĞÅÏ¢±í(couriers_info)
+### é…é€å‘˜ä¿¡æ¯è¡¨(couriers_info)
 
-´æ´¢×ÅÒÑÍ¨¹ıÑéÖ¤µÄÅäËÍÔ±ĞÅÏ¢
+å­˜å‚¨ç€å·²é€šè¿‡éªŒè¯çš„é…é€å‘˜ä¿¡æ¯
 
 ```mysql
 CREATE TABLE couries_info(
@@ -62,53 +62,53 @@ CREATE TABLE couries_info(
     passport_front TINYTEXT NOT NULL,
     passport_detail TINYTEXT NOT NULL,
     operator_id INT UNSIGNED NOT NULL,
-    accept_date TIMESTAMP NOT NULL
+    accept_date INT UNSIGNED NOT NULL
 )Engine=InnoDB DEFAULT CHARSET=UTF8MB4
 ```
 
-| ×Ö¶Î            | ËµÃ÷             |
+| å­—æ®µ            | è¯´æ˜             |
 | --------------- | ---------------- |
-| uid             | ÓÃ»§±êÊ¶·û       |
-| passport_front  | Ñ§ÉúÖ¤Ğ£Ñµ¸ÖÓ¡Ò³ |
-| passport_detail | Ñ§ÉúÖ¤¸öÈËĞÅÏ¢Ò³ |
-| operator_uid    | ²Ù×÷Õßuid        |
-| accept_datel    | Í¨¹ıÊ±¼ä         |
+| uid             | ç”¨æˆ·æ ‡è¯†ç¬¦       |
+| passport_front  | å­¦ç”Ÿè¯æ ¡è®­é’¢å°é¡µ |
+| passport_detail | å­¦ç”Ÿè¯ä¸ªäººä¿¡æ¯é¡µ |
+| operator_uid    | æ“ä½œè€…uid        |
+| accept_datel    | é€šè¿‡æ—¶é—´         |
 
 
 
-### ×¢²á/µÇÂ¼ÈÏÖ¤Âë±í(access_code)
+### æ³¨å†Œ/ç™»å½•è®¤è¯ç è¡¨(access_code)
 
-´æ´¢×Å×¢²áÊ±Ê¹ÓÃµÄ£¨¶ÌĞÅ/[ÓÊÏä]£©ÑéÖ¤Âë
+å­˜å‚¨ç€æ³¨å†Œæ—¶ä½¿ç”¨çš„ï¼ˆçŸ­ä¿¡/[é‚®ç®±]ï¼‰éªŒè¯ç 
 
 ```mysql
 CREATE TABLE access_code(
     phone INT UNSIGNED NOT NULL,
     vcode tinytext NOT NULL,
-    ctime TIMESTAMP NOT NULL,
+    ctime INT UNSIGNED NOT NULL,
     INDEX(phone)
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
-| ×Ö¶Î  | ËµÃ÷           |
+| å­—æ®µ  | è¯´æ˜           |
 | ----- | -------------- |
-| phone | ÊÖ»úºÅ         |
-| code  | ÈÏÖ¤Âë         |
-| ctime | ´´½¨Ê±µÄÊ±¼ä´Á |
+| phone | æ‰‹æœºå·         |
+| code  | è®¤è¯ç          |
+| ctime | åˆ›å»ºæ—¶çš„æ—¶é—´æˆ³ |
 
-### ÖØÖÃÃÜÂëÈÏÖ¤Âë±í(recover_code)
+### é‡ç½®å¯†ç è®¤è¯ç è¡¨(recover_code)
 
-´æ´¢×ÅÖØÖÃÃÜÂëÊ±Ê¹ÓÃµÄ£¨¶ÌĞÅ/[ÓÊÏä]£©ÑéÖ¤Âë
+å­˜å‚¨ç€é‡ç½®å¯†ç æ—¶ä½¿ç”¨çš„ï¼ˆçŸ­ä¿¡/[é‚®ç®±]ï¼‰éªŒè¯ç 
 ```mysql
 CREATE TABLE recover_code(
     phone INT UNSIGNED NOT NULL,
     vcode tinytext NOT NULL,
-    ctime TIMESTAMP NOT NULL,
+    ctime INT UNSIGNED NOT NULL,
     INDEX(phone)
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
-| ×Ö¶Î  | ËµÃ÷           |
+| å­—æ®µ  | è¯´æ˜           |
 | ----- | -------------- |
-| phone | ÊÖ»úºÅ         |
-| code  | ÈÏÖ¤Âë         |
-| ctime | ´´½¨Ê±µÄÊ±¼ä´Á |
+| phone | æ‰‹æœºå·         |
+| code  | è®¤è¯ç          |
+| ctime | åˆ›å»ºæ—¶çš„æ—¶é—´æˆ³ |

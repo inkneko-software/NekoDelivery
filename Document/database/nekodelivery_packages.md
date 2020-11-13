@@ -1,14 +1,14 @@
-## Ä«Ã¨ËÙµİµÄ¿ìµİÊı¾İ¿â
+## å¢¨çŒ«é€Ÿé€’çš„å¿«é€’æ•°æ®åº“
 
-Êı¾İ¿âÃû³Æ£º`nekodelivery_package`
+æ•°æ®åº“åç§°ï¼š`nekodelivery_package`
 
-### ¿ìµİÁĞ±í
+### å¿«é€’åˆ—è¡¨
 
-´æ´¢×ÅÒÑÌí¼Óµ½ÏµÍ³µÄ¿ìµİ
+å­˜å‚¨ç€å·²æ·»åŠ åˆ°ç³»ç»Ÿçš„å¿«é€’
 
 ```mysql
 CREATE TABLE packages(
-	pid INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	package_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     uid INT UNSIGNED NOT NULL INDEX,
     remarks VARCHAR(50) NOT NULL,
     package_number VARCHAR(50) NOT NULL,
@@ -16,31 +16,31 @@ CREATE TABLE packages(
     recipient VARCHAR(20) NOT NULL,
     recipient_phone INT UNSIGNED NOT NULL,
     package_destination VARCHAR(100) NOT NULL,
-    package_desitnation_area TINYINT NOT NULL,
+    package_destination_area TINYINT NOT NULL,
     package_station TINYINT NOT NULL,
     package_status TINYINT NOT NULL,
-    package_create_time DATETIME NOT NULL
+    package_create_time INT UNSIGNED NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
-| ×Ö¶Î                     | ËµÃ÷                                                         |
+| å­—æ®µ                     | è¯´æ˜                                                         |
 | ------------------------ | ------------------------------------------------------------ |
-| pid                      | package id£¬°ü¹ü±êÊ¶·û                                       |
-| uid                      | ËùÊôÓÃ»§µÄid                                                 |
-| remarks                  | ×Ô¶¨Òå±¸×¢                                                   |
-| package_number           | ¿ìµİµÄµ¥ºÅ                                                   |
-| package_from             | ¿ìµİ·şÎñÌá¹©ÉÌ                                               |
-| recipient                | ÊÕ»õÕß                                                       |
-| recipient_phone          | ÊÕ»õÕßµÄµç»°                                                 |
-| package_destination      | °ü¹üµÄÄ¿µÄµØ                                                 |
-| package_destination_area | °ü¹üÄ¿µÄµØËùÊôÇøÓòid                                         |
-| package_station          | °ü¹üµÄÅäËÍÕ¾id                                               |
-| package_status           | °ü¹üµÄ×´Ì¬{0: Î´·¢²¼, 1:ÒÑ·¢²¼£¬µÈ´ı½Óµ¥, 2: ÒÑ½Óµ¥, 3: ÅäËÍÍê³É} |
-| package_create_time      | °ü¹üµÄ´´½¨Ê±¼ä                                               |
+| package_id               | package idï¼ŒåŒ…è£¹æ ‡è¯†ç¬¦                                       |
+| uid                      | æ‰€å±ç”¨æˆ·çš„id                                                 |
+| remarks                  | è‡ªå®šä¹‰å¤‡æ³¨                                                   |
+| package_number           | å¿«é€’çš„å•å·                                                   |
+| package_from             | å¿«é€’æœåŠ¡æä¾›å•†                                               |
+| recipient                | æ”¶è´§è€…                                                       |
+| recipient_phone          | æ”¶è´§è€…çš„ç”µè¯                                                 |
+| package_destination      | åŒ…è£¹çš„ç›®çš„åœ°                                                 |
+| package_destination_area | åŒ…è£¹ç›®çš„åœ°æ‰€å±åŒºåŸŸid                                         |
+| package_station          | åŒ…è£¹çš„é…é€ç«™id                                               |
+| package_status           | åŒ…è£¹çš„çŠ¶æ€{0: æœªå‘å¸ƒ, 1:å·²å‘å¸ƒï¼Œç­‰å¾…æ¥å•, 2: å·²æ¥å•, 3: é…é€å®Œæˆ} |
+| package_create_time      | åŒ…è£¹çš„åˆ›å»ºæ—¶é—´                                               |
 
-### Ñ§Ğ£ÁĞ±í
+### å­¦æ ¡åˆ—è¡¨
 
-´æ´¢×ÅÑ§Ğ£ĞÅÏ¢
+å­˜å‚¨ç€å­¦æ ¡ä¿¡æ¯
 
 ```mysql
 CREATE TABLE school_list(
@@ -50,19 +50,19 @@ CREATE TABLE school_list(
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
-| ×Ö¶Î            | ËµÃ÷       |
+| å­—æ®µ            | è¯´æ˜       |
 | --------------- | ---------- |
-| school_id       | Ñ§Ğ£id     |
-| station_name    | ÅäËÍÕ¾Ãû³Æ |
-| station_address | ÅäËÍÕ¾µØÖ· |
+| school_id       | å­¦æ ¡id     |
+| station_name    | é…é€ç«™åç§° |
+| station_address | é…é€ç«™åœ°å€ |
 
-### ÅäËÍÕ¾ÁĞ±í
+### é…é€ç«™åˆ—è¡¨
 
-´æ´¢×ÅÑ§Ğ£µÄÅäËÍÕ¾
+å­˜å‚¨ç€å­¦æ ¡çš„é…é€ç«™
 
 ```mysql
 CREATE TABLE station_list(
-	sid INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	station_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     school_id INT UNSIGNED NOT NULL,
     station_name VARCHAR(25) NOT NULL,
     station_address VARCHAR(50) NOT NULL,
@@ -70,30 +70,30 @@ CREATE TABLE station_list(
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
-| ×Ö¶Î            | ËµÃ÷       |
+| å­—æ®µ            | è¯´æ˜       |
 | --------------- | ---------- |
-| sid             | ¿ìµİÕ¾id   |
-| station_name    | ÅäËÍÕ¾Ãû³Æ |
-| station_address | ÅäËÍÕ¾µØÖ· |
+| station_id      | å¿«é€’ç«™id   |
+| station_name    | é…é€ç«™åç§° |
+| station_address | é…é€ç«™åœ°å€ |
 
-### °ü¹üÄ¿µÄµØËùÊôÇøÁĞ±í
+### åŒ…è£¹ç›®çš„åœ°æ‰€å±åŒºåˆ—è¡¨
 
-´æ´¢×Å°ü¹üµÄÄ¿µÄµØËùÊôÇø
+å­˜å‚¨ç€åŒ…è£¹çš„ç›®çš„åœ°æ‰€å±åŒº
 
 ```mysql
 CREATE TABLE destination_area_list(
-	dsid INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	destination_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     area_name VARCHAR(25) NOT NULL,
     area_address VARCHAR(50) NOT NULL,
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 ```
 
-| ×Ö¶Î         | ËµÃ÷             |
-| ------------ | ---------------- |
-| dsid         | Ä¿µÄµØËùÊôÇøÓòid |
-| area_name    | ÇøÓòÃû³Æ         |
-| area_address | ÇøÓòµØÖ·         |
+| å­—æ®µ           | è¯´æ˜             |
+| -------------- | ---------------- |
+| destination_id | ç›®çš„åœ°æ‰€å±åŒºåŸŸid |
+| area_name      | åŒºåŸŸåç§°         |
+| area_address   | åŒºåŸŸåœ°å€         |
 
-### ĞèÇóÁĞ±í
+### éœ€æ±‚åˆ—è¡¨
 
-### ¿ìµİĞÅÏ¢±í
+### å¿«é€’ä¿¡æ¯è¡¨

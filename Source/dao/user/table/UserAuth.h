@@ -3,7 +3,7 @@
 struct UserAuth
 {
 	unsigned int uid;
-	unsigned int phone;
+	unsigned long phone;
 	std::string auth_salt;
 	std::string auth_hash;
 	long update_date;

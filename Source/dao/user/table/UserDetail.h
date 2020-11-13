@@ -3,7 +3,7 @@
 struct UserDetail
 {
 	unsigned int uid;
-	unsigned int phone;
+	unsigned long phone;
 	std::string nick;
 	std::string name;
 	std::string avatar;
