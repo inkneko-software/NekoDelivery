@@ -82,7 +82,7 @@ CREATE TABLE couries_info(
 
 ```mysql
 CREATE TABLE access_code(
-    phone INT UNSIGNED NOT NULL,
+    phone BIGINT UNSIGNED NOT NULL,
     vcode tinytext NOT NULL,
     ctime INT UNSIGNED NOT NULL,
     INDEX(phone)
@@ -100,7 +100,7 @@ CREATE TABLE access_code(
 存储着重置密码时使用的（短信/[邮箱]）验证码
 ```mysql
 CREATE TABLE recover_code(
-    phone INT UNSIGNED NOT NULL,
+    phone BIGINT UNSIGNED NOT NULL,
     vcode tinytext NOT NULL,
     ctime INT UNSIGNED NOT NULL,
     INDEX(phone)
