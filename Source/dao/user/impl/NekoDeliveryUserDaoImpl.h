@@ -27,7 +27,7 @@ public:
 	/*
 	* 根据手机号查询用户信息
 	*/
-	std::vector<UserDetail> getUserDetailByPhone(unsigned int phone);
+	std::vector<UserDetail> getUserDetailByPhone(unsigned long phone);
 
 	/*
 	* 根据uid更新用户认证信息
@@ -42,7 +42,7 @@ public:
 	/*
 	* 根据手机号获取用户认证信息
 	*/
-	std::vector<UserAuth> getUserAuthByPhone(unsigned int phone);
+	std::vector<UserAuth> getUserAuthByPhone(unsigned long phone);
 
 	/*
 	* 添加快递员信息
@@ -62,7 +62,7 @@ public:
 	/*
 	* 根据手机号和指定的时间获取认证码记录
 	*/
-	std::vector<AccessCode> getAccessCode(unsigned int phone, unsigned int ctime);
+	std::vector<AccessCode> getAccessCode(unsigned long phone, unsigned int max);
 
 	/*
 	* 保存重置密码验证码
@@ -72,5 +72,5 @@ public:
 	/*
 	* 根据手机号查询重置密码验证码
 	*/
-	std::vector<RecoverCode> getRecoverCode(unsigned int phone, unsigned int ctime);
+	std::vector<RecoverCode> getRecoverCode(unsigned long phone, unsigned int max);
 };

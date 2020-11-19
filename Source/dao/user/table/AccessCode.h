@@ -3,7 +3,7 @@
 #include <string>
 struct AccessCode
 {
-	unsigned int phone;
+	unsigned long phone;
 	std::string vcode;
 	long ctime;
 };

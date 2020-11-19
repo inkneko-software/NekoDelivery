@@ -2,7 +2,7 @@
 #include <string>
 struct RecoverCode
 {
-	unsigned int phone;
+	unsigned long phone;
 	std::string vcode;
 	long ctime;
 };

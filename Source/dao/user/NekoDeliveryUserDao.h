@@ -37,7 +37,7 @@ public:
 	/// </summary>
 	/// <param name="phone"></param>
 	/// <returns>满足条件的userDetail</returns>
-	virtual std::vector<UserDetail> getUserDetailByPhone(unsigned int phone) = 0;
+	virtual std::vector<UserDetail> getUserDetailByPhone(unsigned long phone) = 0;
 	/// <summary>
 	/// 根据uid更新指定的userAuth
 	/// </summary>
@@ -54,7 +54,7 @@ public:
 	/// </summary>
 	/// <param name="phone">指定的phone</param>
 	/// <returns>满足条件的userAuth</returns>
-	virtual std::vector<UserAuth> getUserAuthByPhone(unsigned int phone) = 0;
+	virtual std::vector<UserAuth> getUserAuthByPhone(unsigned long phone) = 0;
 	/// <summary>
 	/// 保存courierInfo
 	/// </summary>
@@ -77,7 +77,7 @@ public:
 	/// <param name="phone">指定的手机号</param>
 	/// <param name="max">根据时间倒叙。最多取的数量</param>
 	/// <returns>满足条件的accessCode</returns>
-	virtual std::vector<AccessCode> getAccessCode(unsigned int phone, unsigned int max) = 0;
+	virtual std::vector<AccessCode> getAccessCode(unsigned long phone, unsigned int max) = 0;
 	/// <summary>
 	/// 保存recoverCode
 	/// </summary>
@@ -89,7 +89,7 @@ public:
 	/// <param name="phone">手机号</param>
 	/// <param name="max">根据时间倒叙。最多取的数量</param>
 	/// <returns>满足条件的recoverCode</returns>
-	virtual std::vector<RecoverCode> getRecoverCode(unsigned int phone, unsigned int max) = 0;
+	virtual std::vector<RecoverCode> getRecoverCode(unsigned long phone, unsigned int max) = 0;
 
 	virtual ~NekoDeliveryUserDao() {}
 };

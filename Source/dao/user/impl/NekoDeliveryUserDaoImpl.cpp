@@ -67,7 +67,7 @@ std::vector<UserDetail> NekoDeliveryUserDaoImpl::getUserDetailByUid(unsigned int
 }
 
 
-std::vector<UserDetail> NekoDeliveryUserDaoImpl::getUserDetailByPhone(unsigned int phone)
+std::vector<UserDetail> NekoDeliveryUserDaoImpl::getUserDetailByPhone(unsigned long phone)
 {
 	PtrResultSet result(executeQuery(
 		dbname,
@@ -127,7 +127,7 @@ std::vector<UserAuth> NekoDeliveryUserDaoImpl::getUserAuthByUid(unsigned int uid
 	return resultArray;
 }
 
-std::vector<UserAuth> NekoDeliveryUserDaoImpl::getUserAuthByPhone(unsigned int phone)
+std::vector<UserAuth> NekoDeliveryUserDaoImpl::getUserAuthByPhone(unsigned long phone)
 {
 	PtrResultSet result(executeQuery(
 		dbname,
@@ -187,21 +187,73 @@ std::vector<CouriersInfo> NekoDeliveryUserDaoImpl::getCourierInfo(unsigned int u
 
 void NekoDeliveryUserDaoImpl::saveAccessCode(const AccessCode& accessCode)
 {
-
+	executeUpdate(
+		dbname, 
+		"INSERT INTO access_code VALUES(?,?,?)",
+		[accessCode](PtrPreParedStatement ptsm) {
+			ptsm->setUInt64(1, accessCode.phone);
+			ptsm->setString(2, accessCode.vcode);
+			ptsm->setUInt(3, accessCode.ctime);
+		}
+	);
 }
 
 
-std::vector<AccessCode> NekoDeliveryUserDaoImpl::getAccessCode(unsigned int phone, unsigned int ctime)
+std::vector<AccessCode> NekoDeliveryUserDaoImpl::getAccessCode(unsigned long phone, unsigned int max)
 {
+	PtrResultSet result(executeQuery(
+		dbname,
+		"SELECT phone, vcode, ctime FROM access_code WHERE phone=? ORDER BY ctime ASC LIMIT ?",
+		[phone, max](PtrPreParedStatement ptsm) {
+			ptsm->setUInt64(1, phone);
+			ptsm->setInt(2, max);
+		}
+	));
 
+	std::vector<AccessCode> ret;
+	while (result->next())
+	{
+		AccessCode ac;
+		ac.phone = result->getUInt64(1);
+		ac.vcode = result->getString(2);
+		ac.ctime = result->getUInt(3);
+		ret.push_back(ac);
+	}
+	return ret;
 }
 
 void NekoDeliveryUserDaoImpl::saveRecoverCode(const RecoverCode& recoverCode)
 {
-
+	executeUpdate(
+		dbname,
+		"INSERT INTO recover_code VALUES(?,?,?)",
+		[recoverCode](PtrPreParedStatement ptsm) {
+			ptsm->setUInt64(1, recoverCode.phone);
+			ptsm->setString(2, recoverCode.vcode);
+			ptsm->setUInt(3, recoverCode.ctime);
+		}
+	);
 }
 
-std::vector<RecoverCode> NekoDeliveryUserDaoImpl::getRecoverCode(unsigned int phone, unsigned int ctime)
+std::vector<RecoverCode> NekoDeliveryUserDaoImpl::getRecoverCode(unsigned long phone, unsigned int max)
 {
+	PtrResultSet result(executeQuery(
+		dbname,
+		"SELECT phone, vcode, ctime FROM recover_code WHERE phone=? ORDER BY ctime ASC LIMIT ?",
+		[phone, max](PtrPreParedStatement ptsm) {
+			ptsm->setUInt64(1, phone);
+			ptsm->setInt(2, max);
+		}
+	));
 
+	std::vector<RecoverCode> ret;
+	while (result->next())
+	{
+		RecoverCode rc;
+		rc.phone = result->getUInt64(1);
+		rc.vcode = result->getString(2);
+		rc.ctime = result->getUInt(3);
+		ret.push_back(rc);
+	}
+	return ret;
 }
