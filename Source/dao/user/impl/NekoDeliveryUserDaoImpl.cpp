@@ -1,6 +1,6 @@
 #include "NekoDeliveryUserDaoImpl.h"
 
-void NekoDeliveryUserDaoImpl::registerAccount(const UserDetail& userDetail, const UserAuth& userAuth) noexcept(false)
+bool NekoDeliveryUserDaoImpl::registerAccount(const UserDetail& userDetail, const UserAuth& userAuth) noexcept(false)
 {
 	PtrConnection conn = pool.getConnection();
 	conn->setSchema(dbname);
@@ -14,16 +14,22 @@ void NekoDeliveryUserDaoImpl::registerAccount(const UserDetail& userDetail, cons
 	ptsm->setString(4, userDetail.avatar);
 	ptsm->setUInt(5, userDetail.register_date);
 	ptsm->setInt(6, userDetail.state);
-	ptsm->execute();
+	int affectedNum = ptsm->executeUpdate();
+	if (affectedNum == 0) {
+		st->execute("ROLLBACK");
+		return false;
+	}
 	st->execute("SET @lastInsertId = LAST_INSERT_ID()");
 	ptsm.reset(conn->prepareStatement("INSERT INTO user_auth(uid, phone, auth_salt, auth_hash, update_date) VALUES(@lastInsertId,?,?,?,?)"));
-	ptsm->setUInt(1, userAuth.phone);
+	ptsm->setUInt64(1, userAuth.phone);
 	ptsm->setString(2, userAuth.auth_salt);
 	ptsm->setString(3, userAuth.auth_hash);
 	ptsm->setUInt(4, userAuth.update_date);
 	ptsm->execute();
 	st->execute("COMMIT");
 	pool.releaseConnection(conn);
+
+	return true;
 }
 
 

@@ -12,7 +12,7 @@ public:
 	/*
 	* 注册用户
 	*/
-	void registerAccount(const UserDetail& userDetail, const UserAuth& userAuth) noexcept(false);
+	bool registerAccount(const UserDetail& userDetail, const UserAuth& userAuth) noexcept(false);
 
 	/*
 	* 根据uid更新用户信息

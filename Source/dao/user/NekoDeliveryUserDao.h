@@ -20,7 +20,8 @@ public:
 	/// </summary>
 	/// <param name="userDetail">用户的userDetail数据</param>
 	/// <param name="userAuth">用户的userAuth数据</param>
-	virtual void registerAccount(const UserDetail& userDetail, const UserAuth& userAuth) noexcept(false) = 0;
+	/// <returns>是否注册成功<returns>
+	virtual bool registerAccount(const UserDetail& userDetail, const UserAuth& userAuth) noexcept(false) = 0;
 	/// <summary>
 	/// 根据userDetail.uid更新指定userDetail
 	/// </summary>
