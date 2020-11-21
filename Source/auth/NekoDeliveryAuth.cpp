@@ -5,51 +5,35 @@
 #include <ctime>
 
 #include <iostream>
+
+
 NekoDeliveryAuth::NekoDeliveryAuth()
 {
-	userDao.reset(new NekoDeliveryUserDaoImpl("127.0.0.1",3306,"dev_leaf", "leaf",10));
+	userDao.reset(new NekoDeliveryUserDaoImpl("127.0.0.1", 3306, "dev_leaf", "leaf", 10));
+
+	routeTable[apiPrefix + "/checkPhone"]      = ROUTE_CALLBACK{ return this->checkPhone(request); };
+	routeTable[apiPrefix + "/sendRegisterSMG"] = ROUTE_CALLBACK{ return this->sendRegisterSMG(request); };
+	routeTable[apiPrefix + "/sendRecoverSMG"]  = ROUTE_CALLBACK{ return this->sendRecoverSMG(request); };
+	routeTable[apiPrefix + "/registerAccount"] = ROUTE_CALLBACK{ return this->registerAccount(request); };
+	routeTable[apiPrefix + "/loginAccount"]    = ROUTE_CALLBACK{ return this->loginAccount(request); };
+	routeTable[apiPrefix + "/resetPassword"]   = ROUTE_CALLBACK{ return this->resetPassword(request); };
+	routeTable[apiPrefix + "/updateDetail"]    = ROUTE_CALLBACK{ return this->updateDetail(request); };
+
 }
 
 void NekoDeliveryAuth::HTTPPacketHandler(int clientfd, HTTPPacket::HTTPRequestPacket request) noexcept
 {
-	if (request.requestPath == apiPrefix + "/checkPhone")
+	HTTPPacket::HTTPResponsePacket response;
+	auto route = routeTable.find(request.requestPath);
+	if (route != routeTable.end())
 	{
-		connectedClients[clientfd].writeBuffer += checkPhone(request).ToString();
-	}
-	else if (request.requestPath == apiPrefix + "/sendRegisterSMG") 
-	{
-		connectedClients[clientfd].writeBuffer += sendRegisterSMG(request).ToString();
-	}
-	else if (request.requestPath == apiPrefix + "/sendRecoverSMG")
-	{
-		connectedClients[clientfd].writeBuffer += sendRecoverSMG(request).ToString();
-	}
-	else if (request.requestPath == apiPrefix + "/registerAccount")
-	{
-		connectedClients[clientfd].writeBuffer += registerAccount(request).ToString();
-	}
-	else if (request.requestPath == apiPrefix + "/loginAccount")
-	{
-		connectedClients[clientfd].writeBuffer += loginAccount(request).ToString();
-	}
-	else if (request.requestPath == apiPrefix + "/resetPassword")
-	{
-		connectedClients[clientfd].writeBuffer += resetPassword(request).ToString();
-	}
-	else if (request.requestPath == apiPrefix + "/updateDetail")
-	{
-		connectedClients[clientfd].writeBuffer += updateDetail(request).ToString();
-	}
-	else if (request.requestPath == apiPrefix + "/checsendRegisterSMGkPhone")
-	{
-		connectedClients[clientfd].writeBuffer += sendRegisterSMG(request).ToString();
+		response = route->second(clientfd, request);
 	}
 	else
 	{
-		HTTPPacket::HTTPResponsePacket response;
 		response.SetResponseCode(HTTPPacket::ResponseCode::NotFound);
-		connectedClients[clientfd].writeBuffer += response.ToString();
 	}
+	connectedClients[clientfd].writeBuffer += response.ToString();
 }
 
 HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::checkPhone(HTTPPacket::HTTPRequestPacket request) noexcept
