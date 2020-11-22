@@ -7,7 +7,7 @@
 #include <functional>
 
 using PtrStatement = std::shared_ptr<sql::Statement>;
-using PtrPreParedStatement = std::shared_ptr<sql::PreparedStatement>;
+using PtrPreparedStatement = std::shared_ptr<sql::PreparedStatement>;
 using PtrResultSet = std::shared_ptr<sql::ResultSet>;
 
 class MySQLBaseDao
@@ -23,10 +23,10 @@ public:
 	bool execute(std::string db, std::string statement) noexcept(false);
 
 	PtrResultSet executeQuery(std::string db, std::string statement) noexcept(false);
-	PtrResultSet executeQuery(std::string db, std::string preparedStatement, std::function<void(PtrPreParedStatement pstm)> adapter) noexcept(false);
+	PtrResultSet executeQuery(std::string db, std::string preparedStatement, std::function<void(PtrPreparedStatement pstm)> adapter) noexcept(false);
 
 	size_t executeUpdate(std::string db, std::string statement) noexcept(false);
-	size_t executeUpdate(std::string db, std::string statement, std::function<void(PtrPreParedStatement pstm)> adapter) noexcept(false);
+	size_t executeUpdate(std::string db, std::string statement, std::function<void(PtrPreparedStatement pstm)> adapter) noexcept(false);
 
 
 };

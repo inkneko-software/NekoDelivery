@@ -35,13 +35,13 @@ PtrResultSet MySQLBaseDao::executeQuery(std::string db, std::string st) noexcept
 	}
 }
 
-PtrResultSet MySQLBaseDao::executeQuery(std::string db, std::string preparedStatement, std::function<void(PtrPreParedStatement pstm)> adapter) noexcept(false)
+PtrResultSet MySQLBaseDao::executeQuery(std::string db, std::string preparedStatement, std::function<void(PtrPreparedStatement pstm)> adapter) noexcept(false)
 {
 	PtrConnection conn(pool.getConnection());
 	try
 	{
 		conn->setSchema(db);
-		PtrPreParedStatement querySt(conn->prepareStatement(preparedStatement));
+		PtrPreparedStatement querySt(conn->prepareStatement(preparedStatement));
 		adapter(querySt);
 		PtrResultSet result(querySt->executeQuery());
 		pool.releaseConnection(conn);
@@ -71,13 +71,13 @@ size_t MySQLBaseDao::executeUpdate(std::string db, std::string statement) noexce
 		throw e;
 	}
 }
-size_t MySQLBaseDao::executeUpdate(std::string db, std::string preparedStatement, std::function<void(PtrPreParedStatement pstm)> adapter) noexcept(false)
+size_t MySQLBaseDao::executeUpdate(std::string db, std::string preparedStatement, std::function<void(PtrPreparedStatement pstm)> adapter) noexcept(false)
 {
 	PtrConnection conn(pool.getConnection());
 	try
 	{
 		conn->setSchema(db);
-		PtrPreParedStatement querySt(conn->prepareStatement(preparedStatement));
+		PtrPreparedStatement querySt(conn->prepareStatement(preparedStatement));
 		adapter(querySt);
 		size_t affected = querySt->executeUpdate();
 		pool.releaseConnection(conn);
