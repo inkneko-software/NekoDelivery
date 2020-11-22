@@ -10,6 +10,7 @@
 NekoDeliveryAuth::NekoDeliveryAuth()
 {
 	userDao.reset(new NekoDeliveryUserDaoImpl("127.0.0.1", 3306, "dev_leaf", "leaf", 10));
+	sessionManager.reset(new NekoDeliverySession());
 
 	routeTable[apiPrefix + "/checkPhone"]      = ROUTE_CALLBACK{ return this->checkPhone(request); };
 	routeTable[apiPrefix + "/sendRegisterSMG"] = ROUTE_CALLBACK{ return this->sendRegisterSMG(request); };
@@ -55,7 +56,7 @@ HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::checkPhone(HTTPPacket::HTTPRequ
 	{
 		long phone = std::stol(requestParam["phone"]);
 		auto result =  userDao->getUserDetailByPhone(phone);
-		if (result.size() != 0)
+		if (result != nullptr)
 		{
 			responseJson["code"] = -10002;
 			responseJson["msg"] = "手机号码已被注册";
@@ -96,7 +97,7 @@ HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::sendRegisterSMG(HTTPPacket::HTT
 	{
 		long phone = std::stol(requestParam["phone"]);
 		auto result = userDao->getUserDetailByPhone(phone);
-		if (result.size() != 0)
+		if (result != nullptr)
 		{
 			responseJson["code"] = -10002;
 			responseJson["msg"] = "手机号码已被注册";
@@ -145,7 +146,7 @@ HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::sendRecoverSMG(HTTPPacket::HTTP
 	{
 		long phone = std::stol(requestParam["phone"]);
 		auto result = userDao->getUserDetailByPhone(phone);
-		if (result.size() == 0)
+		if (result  == nullptr)
 		{
 			responseJson["code"] = -10003;
 			responseJson["msg"] = "手机号码未注册";
@@ -219,7 +220,7 @@ HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::registerAccount(HTTPPacket::HTT
 	{
 		long phone = std::stol(requestParam["phone"]);
 		auto result = userDao->getUserDetailByPhone(phone);
-		if (result.size() != 0)
+		if (result  != nullptr)
 		{
 			responseJson["code"] = -10002;
 			responseJson["msg"] = "手机号码已被注册";
@@ -286,7 +287,53 @@ HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::registerAccount(HTTPPacket::HTT
 
 HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::loginAccount(HTTPPacket::HTTPRequestPacket request) noexcept
 {
-	return HTTPPacket::HTTPResponsePacket();
+	HTTPPacket::HTTPResponsePacket response;
+	auto responseJson = nlohmann::json();
+	auto requestParams = webstring::ParseKeyValue(request.body);
+	try 
+	{
+		//std::string sessionId = request.GetCookieValue("sessionId");
+		//std::string sessionToken = request.GetCookieValue("sessionToken");
+		if (checkPhoneFormat(requestParams["phone"]) == true)
+		{
+			auto userAuth = userDao->getUserAuthByPhone(std::stoul(requestParams["phone"]));
+			if (userAuth != nullptr)
+			{
+				std::string culculatedHash = webstring::sha1(userAuth->auth_salt + webstring::sha1(requestParams["password"]));
+				if (userAuth->auth_hash == culculatedHash)
+				{
+					unsigned long sessionId = 0;
+					std::string sessionToken;
+					if (sessionManager->createSession(sessionId, sessionToken))
+					{
+						Attribute props;
+						props["uid"] = userAuth->uid;
+						sessionManager->saveAttribute(sessionId, sessionToken, props);
+						response.SetResponseCode(HTTPPacket::ResponseCode::OK);
+						response.SetCookie("sessionId", std::to_string(sessionId), 30 * 24 * 60 * 60 * 1000l);
+						response.SetCookie("sessionToken", sessionToken, 30 * 24 * 60 * 60 * 1000l);
+						return response;
+					}
+					else
+					{
+						response.SetResponseCode(HTTPPacket::ResponseCode::InternalServerError);
+						return response;
+					}
+				}
+			}
+		}
+		response.SetResponseCode(HTTPPacket::ResponseCode::OK);
+		response.SetContentType("application/json; charset=utf8");
+		responseJson["code"] = -10011;
+		responseJson["msg"] = "用户名或密码错误";
+		response.body = responseJson.dump();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+		response.SetResponseCode(HTTPPacket::ResponseCode::InternalServerError);
+	}
+	return response;
 }
 
 HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::resetPassword(HTTPPacket::HTTPRequestPacket request) noexcept
@@ -296,7 +343,47 @@ HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::resetPassword(HTTPPacket::HTTPR
 
 HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::updateDetail(HTTPPacket::HTTPRequestPacket request) noexcept
 {
-	return HTTPPacket::HTTPResponsePacket();
+	HTTPPacket::HTTPResponsePacket response;
+	try
+	{
+		std::string sessionId = request.GetCookieValue("sessionId");
+		std::string sessionToken = request.GetCookieValue("sessionToken");
+		if (sessionId != "" && sessionToken != "")
+		{
+			int sessionIdInt = 0;
+			try
+			{
+				sessionIdInt = std::stoul(sessionId);
+				PtrAttribute props(sessionManager->getAttribute(std::stoul(sessionId), sessionToken));
+				if (props != nullptr)
+				{
+					unsigned long uid = (*props)["uid"].get<unsigned long>();
+					response.body = "You are logged in.<br> Your uid is: " + std::to_string(uid);
+				}
+				else
+				{
+					response.body = "You are not logged in.";
+				}
+				
+			}
+			catch (std::invalid_argument &e)
+			{
+				response.body = "You are not logged in.";
+			}
+		}
+		else
+		{
+			response.body = "You are not logged in.";
+		}
+		response.SetContentType("text/html; charset=UTF8");
+		return response;
+	}
+	catch (SessionExpiredException& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	response.SetResponseCode(HTTPPacket::ResponseCode::InternalServerError);
+	return response;
 }
 
 bool NekoDeliveryAuth::checkPhoneFormat(std::string phone) noexcept

@@ -1,12 +1,14 @@
 #include <tinyHttpd/tinyHttpd.h>
 #include "../dao/user/NekoDeliveryUserDao.h"
 #include "../dao/user/impl/NekoDeliveryUserDaoImpl.h"
+#include "../session/NekoDeliverySession.h"
 
 class NekoDeliveryAuth : public TinyHttpd
 {
 private: 
 	std::string apiPrefix = "/api/v1/auth";
 	std::unique_ptr<NekoDeliveryUserDao> userDao;
+	std::unique_ptr<NekoDeliverySession> sessionManager;
 
 public:
 	NekoDeliveryAuth();

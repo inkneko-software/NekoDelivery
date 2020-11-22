@@ -7,7 +7,7 @@ bool NekoDeliveryUserDaoImpl::registerAccount(const UserDetail& userDetail, cons
 	PtrStatement st(conn->createStatement());
 
 	st->execute("BEGIN");
-	PtrPreParedStatement ptsm(conn->prepareStatement("INSERT INTO user_detail(phone, nick, name, avatar,register_date,state) VALUES(?,?,?,?,?,?)"));
+	PtrPreparedStatement ptsm(conn->prepareStatement("INSERT INTO user_detail(phone, nick, name, avatar,register_date,state) VALUES(?,?,?,?,?,?)"));
 	ptsm->setUInt64(1, userDetail.phone);
 	ptsm->setString(2, userDetail.nick);
 	ptsm->setString(3, userDetail.name);
@@ -38,7 +38,7 @@ void NekoDeliveryUserDaoImpl::updateUserDetail(const UserDetail& userDetail)
 	executeUpdate(
 		dbname,
 		"UPDATE user_detail SET phone=?, nick=?, name=?, avatar=?, register_date=?, state=? WHERE uid=?",
-		[userDetail](PtrPreParedStatement ptsm) {
+		[userDetail](PtrPreparedStatement ptsm) {
 			ptsm->setUInt64(1, userDetail.phone);
 			ptsm->setString(2, userDetail.nick);
 			ptsm->setString(3, userDetail.name);
@@ -49,51 +49,49 @@ void NekoDeliveryUserDaoImpl::updateUserDetail(const UserDetail& userDetail)
 		});
 }
 
-std::vector<UserDetail> NekoDeliveryUserDaoImpl::getUserDetailByUid(unsigned int uid)
+PtrUserDetail NekoDeliveryUserDaoImpl::getUserDetailByUid(unsigned int uid)
 {
 	PtrResultSet result(executeQuery(
 		dbname,
 		"SELECT uid, phone, nick, avatar, register_date, state, name FROM user_detail WHERE uid=?",
-		[uid](PtrPreParedStatement ptsm) {ptsm->setUInt(1, uid);})
+		[uid](PtrPreparedStatement ptsm) {ptsm->setUInt(1, uid);})
 	);
-	std::vector<UserDetail> ret;
-	while (result->next())
+	if (result->next())
 	{
-		UserDetail userDetail = {};
-		userDetail.uid = result->getUInt(1);
-		userDetail.phone = result->getUInt64(2);
-		userDetail.nick = result->getString(3);
-		userDetail.avatar = result->getString(4);
-		userDetail.register_date = result->getUInt(5);
-		userDetail.state = result->getInt(6);
-		userDetail.name = result->getString(7);
-		ret.push_back(userDetail);
+		PtrUserDetail userDetail(new UserDetail);
+		userDetail->uid = result->getUInt(1);
+		userDetail->phone = result->getUInt64(2);
+		userDetail->nick = result->getString(3);
+		userDetail->avatar = result->getString(4);
+		userDetail->register_date = result->getUInt(5);
+		userDetail->state = result->getInt(6);
+		userDetail->name = result->getString(7);
+		return userDetail;
 	}
-	return ret;
+	return nullptr;
 }
 
 
-std::vector<UserDetail> NekoDeliveryUserDaoImpl::getUserDetailByPhone(unsigned long phone)
+PtrUserDetail NekoDeliveryUserDaoImpl::getUserDetailByPhone(unsigned long phone)
 {
 	PtrResultSet result(executeQuery(
 		dbname,
 		"SELECT uid, phone, nick, avatar, register_date, state, name FROM user_detail WHERE phone=?",
-		[phone](PtrPreParedStatement ptsm) {ptsm->setUInt64(1, phone); })
+		[phone](PtrPreparedStatement ptsm) {ptsm->setUInt64(1, phone); })
 	);
-	std::vector<UserDetail> ret;
-	while (result->next())
+	if (result->next())
 	{
-		UserDetail userDetail = {};
-		userDetail.uid = result->getUInt(1);
-		userDetail.phone = result->getUInt64(2);
-		userDetail.nick = result->getString(3);
-		userDetail.avatar = result->getString(4);
-		userDetail.register_date = result->getUInt(5);
-		userDetail.state = result->getInt(6);
-		userDetail.name = result->getString(7);
-		ret.push_back(userDetail);
+		PtrUserDetail userDetail(new UserDetail);
+		userDetail->uid = result->getUInt(1);
+		userDetail->phone = result->getUInt64(2);
+		userDetail->nick = result->getString(3);
+		userDetail->avatar = result->getString(4);
+		userDetail->register_date = result->getUInt(5);
+		userDetail->state = result->getInt(6);
+		userDetail->name = result->getString(7);
+		return userDetail;
 	}
-	return ret;
+	return nullptr;
 }
 
 
@@ -102,7 +100,7 @@ void NekoDeliveryUserDaoImpl::updateUserAuth(const UserAuth& userAuth)
 	executeUpdate(
 		"nekodelivery_user",
 		"UPDATE user_auth SET phone=?, auth_salt=?, auth_hash=?, update_date=? WHERE uid=?",
-		[userAuth](PtrPreParedStatement ptsm) {
+		[userAuth](PtrPreparedStatement ptsm) {
 			ptsm->setUInt64(1, userAuth.phone);
 			ptsm->setString(2, userAuth.auth_salt);
 			ptsm->setString(3, userAuth.auth_hash);
@@ -112,46 +110,44 @@ void NekoDeliveryUserDaoImpl::updateUserAuth(const UserAuth& userAuth)
 }
 
 
-std::vector<UserAuth> NekoDeliveryUserDaoImpl::getUserAuthByUid(unsigned int uid)
+PtrUserAuth NekoDeliveryUserDaoImpl::getUserAuthByUid(unsigned int uid)
 {
 	PtrResultSet result(executeQuery(
 		dbname,
 		"SELECT uid, phone, auth_salt, auth_hash, update_date FROM user_auth WHERE uid=?",
-		[uid](PtrPreParedStatement ptsm) {ptsm->setUInt(1, uid); }
+		[uid](PtrPreparedStatement ptsm) {ptsm->setUInt(1, uid); }
 	));
-	std::vector<UserAuth> resultArray;
-	while (result->next())
+	if (result->next())
 	{
-		UserAuth userAuth;
-		userAuth.uid = result->getUInt(1);
-		userAuth.phone = result->getUInt64(2);
-		userAuth.auth_salt = result->getString(3);
-		userAuth.auth_hash = result->getString(4);
-		userAuth.update_date = result->getUInt(5);
-		resultArray.push_back(userAuth);
+		PtrUserAuth userAuth(new UserAuth);
+		userAuth->uid = result->getUInt(1);
+		userAuth->phone = result->getUInt64(2);
+		userAuth->auth_salt = result->getString(3);
+		userAuth->auth_hash = result->getString(4);
+		userAuth->update_date = result->getUInt(5);
+		return userAuth;
 	}
-	return resultArray;
+	return nullptr;
 }
 
-std::vector<UserAuth> NekoDeliveryUserDaoImpl::getUserAuthByPhone(unsigned long phone)
+PtrUserAuth NekoDeliveryUserDaoImpl::getUserAuthByPhone(unsigned long phone)
 {
 	PtrResultSet result(executeQuery(
 		dbname,
 		"SELECT uid, phone, auth_salt, auth_hash, update_date FROM user_auth WHERE phone=?",
-		[phone](PtrPreParedStatement ptsm) {ptsm->setUInt(1, phone); }
+		[phone](PtrPreparedStatement ptsm) {ptsm->setUInt64(1, phone); }
 	));
-	std::vector<UserAuth> resultArray;
-	while (result->next())
+	if (result->next())
 	{
-		UserAuth userAuth;
-		userAuth.uid = result->getUInt(1);
-		userAuth.phone = result->getUInt64(2);
-		userAuth.auth_salt = result->getString(3);
-		userAuth.auth_hash = result->getString(4);
-		userAuth.update_date = result->getUInt(5);
-		resultArray.push_back(userAuth);
+		PtrUserAuth userAuth(new UserAuth);
+		userAuth->uid = result->getUInt(1);
+		userAuth->phone = result->getUInt64(2);
+		userAuth->auth_salt = result->getString(3);
+		userAuth->auth_hash = result->getString(4);
+		userAuth->update_date = result->getUInt(5);
+		return userAuth;
 	}
-	return resultArray;
+	return nullptr;
 }
 
 
@@ -160,7 +156,7 @@ void NekoDeliveryUserDaoImpl::saveCourierInfo(const CouriersInfo& courierInfo)
 	executeUpdate(
 		dbname,
 		"INSERT INTO courier_info(uid, passport_front, passport_detail, operator_id, accept_date) values(?,?,?,?,?)",
-		[courierInfo](PtrPreParedStatement ptsm) {
+		[courierInfo](PtrPreparedStatement ptsm) {
 			ptsm->setUInt(1, courierInfo.uid);
 			ptsm->setString(2, courierInfo.passport_front);
 			ptsm->setString(3, courierInfo.passport_detail);
@@ -170,25 +166,24 @@ void NekoDeliveryUserDaoImpl::saveCourierInfo(const CouriersInfo& courierInfo)
 	);
 }
 
-std::vector<CouriersInfo> NekoDeliveryUserDaoImpl::getCourierInfo(unsigned int uid)
+PtrCouriersInfo NekoDeliveryUserDaoImpl::getCourierInfo(unsigned int uid)
 {
 	PtrResultSet result(executeQuery(
 		dbname,
 		"SELECT uid, passport_front, passport_detail, operator_id, accept_date FROM user_courier_info WHERE uid=?",
-		[uid](PtrPreParedStatement ptsm) {ptsm->setUInt(1, uid); }
+		[uid](PtrPreparedStatement ptsm) {ptsm->setUInt(1, uid); }
 	));
-	std::vector<CouriersInfo> resultArray;
-	while (result->next())
+	if (result->next())
 	{
-		CouriersInfo couriersInfo;
-		couriersInfo.uid = result->getUInt(1);
-		couriersInfo.passport_front = result->getString(2);
-		couriersInfo.passport_detail = result->getString(3);
-		couriersInfo.operator_id = result->getUInt(4);
-		couriersInfo.accept_date = result->getUInt(5);
-		resultArray.push_back(couriersInfo);
+		PtrCouriersInfo couriersInfo(new CouriersInfo);
+		couriersInfo->uid = result->getUInt(1);
+		couriersInfo->passport_front = result->getString(2);
+		couriersInfo->passport_detail = result->getString(3);
+		couriersInfo->operator_id = result->getUInt(4);
+		couriersInfo->accept_date = result->getUInt(5);
+		return couriersInfo;
 	}
-	return resultArray;
+	return nullptr;
 }
 
 void NekoDeliveryUserDaoImpl::saveAccessCode(const AccessCode& accessCode)
@@ -196,7 +191,7 @@ void NekoDeliveryUserDaoImpl::saveAccessCode(const AccessCode& accessCode)
 	executeUpdate(
 		dbname, 
 		"INSERT INTO access_code VALUES(?,?,?)",
-		[accessCode](PtrPreParedStatement ptsm) {
+		[accessCode](PtrPreparedStatement ptsm) {
 			ptsm->setUInt64(1, accessCode.phone);
 			ptsm->setString(2, accessCode.vcode);
 			ptsm->setUInt(3, accessCode.ctime);
@@ -210,7 +205,7 @@ std::vector<AccessCode> NekoDeliveryUserDaoImpl::getAccessCode(unsigned long pho
 	PtrResultSet result(executeQuery(
 		dbname,
 		"SELECT phone, vcode, ctime FROM access_code WHERE phone=? ORDER BY ctime ASC LIMIT ?",
-		[phone, max](PtrPreParedStatement ptsm) {
+		[phone, max](PtrPreparedStatement ptsm) {
 			ptsm->setUInt64(1, phone);
 			ptsm->setInt(2, max);
 		}
@@ -233,7 +228,7 @@ void NekoDeliveryUserDaoImpl::saveRecoverCode(const RecoverCode& recoverCode)
 	executeUpdate(
 		dbname,
 		"INSERT INTO recover_code VALUES(?,?,?)",
-		[recoverCode](PtrPreParedStatement ptsm) {
+		[recoverCode](PtrPreparedStatement ptsm) {
 			ptsm->setUInt64(1, recoverCode.phone);
 			ptsm->setString(2, recoverCode.vcode);
 			ptsm->setUInt(3, recoverCode.ctime);
@@ -246,7 +241,7 @@ std::vector<RecoverCode> NekoDeliveryUserDaoImpl::getRecoverCode(unsigned long p
 	PtrResultSet result(executeQuery(
 		dbname,
 		"SELECT phone, vcode, ctime FROM recover_code WHERE phone=? ORDER BY ctime ASC LIMIT ?",
-		[phone, max](PtrPreParedStatement ptsm) {
+		[phone, max](PtrPreparedStatement ptsm) {
 			ptsm->setUInt64(1, phone);
 			ptsm->setInt(2, max);
 		}

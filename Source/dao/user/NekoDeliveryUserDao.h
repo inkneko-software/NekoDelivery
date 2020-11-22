@@ -1,13 +1,16 @@
 #pragma once
 #include <string>
 #include <vector>
-
+#include <memory>
 #include "table/UserDetail.h"
 #include "table/UserAuth.h"
 #include "table/CouriersInfo.h"
 #include "table/AccessCode.h"
 #include "table/RecoverCode.h"
 
+using PtrUserDetail = std::unique_ptr<UserDetail>;
+using PtrUserAuth = std::unique_ptr<UserAuth>;
+using PtrCouriersInfo = std::unique_ptr<CouriersInfo>;
 class NekoDeliveryUserDao
 {
 protected:
@@ -32,13 +35,13 @@ public:
 	/// </summary>
 	/// <param name="uid">指定的uid</param>
 	/// <returns>满足条件的userDetail</returns>
-	virtual std::vector<UserDetail> getUserDetailByUid(unsigned int uid) = 0;
+	virtual PtrUserDetail getUserDetailByUid(unsigned int uid) = 0;
 	/// <summary>
 	/// 根据phone获取userDetail
 	/// </summary>
 	/// <param name="phone"></param>
 	/// <returns>满足条件的userDetail</returns>
-	virtual std::vector<UserDetail> getUserDetailByPhone(unsigned long phone) = 0;
+	virtual PtrUserDetail getUserDetailByPhone(unsigned long phone) = 0;
 	/// <summary>
 	/// 根据uid更新指定的userAuth
 	/// </summary>
@@ -49,13 +52,13 @@ public:
 	/// </summary>
 	/// <param name="uid">指定的uid</param>
 	/// <returns>满足条件的userAuth</returns>
-	virtual std::vector<UserAuth> getUserAuthByUid(unsigned int uid) = 0;
+	virtual PtrUserAuth getUserAuthByUid(unsigned int uid) = 0;
 	/// <summary>
 	/// 根据phone查询userAuth
 	/// </summary>
 	/// <param name="phone">指定的phone</param>
 	/// <returns>满足条件的userAuth</returns>
-	virtual std::vector<UserAuth> getUserAuthByPhone(unsigned long phone) = 0;
+	virtual PtrUserAuth getUserAuthByPhone(unsigned long phone) = 0;
 	/// <summary>
 	/// 保存courierInfo
 	/// </summary>
@@ -66,7 +69,7 @@ public:
 	/// </summary>
 	/// <param name="uid"></param>
 	/// <returns></returns>
-	virtual std::vector<CouriersInfo> getCourierInfo(unsigned int uid) = 0;
+	virtual PtrCouriersInfo getCourierInfo(unsigned int uid) = 0;
 	/// <summary>
 	/// 保存accessCode
 	/// </summary>

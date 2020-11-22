@@ -22,12 +22,12 @@ public:
 	/*
 	* 根据uid查询用户信息
 	*/
-	std::vector<UserDetail> getUserDetailByUid(unsigned int uid);
+	PtrUserDetail getUserDetailByUid(unsigned int uid);
 
 	/*
 	* 根据手机号查询用户信息
 	*/
-	std::vector<UserDetail> getUserDetailByPhone(unsigned long phone);
+	PtrUserDetail getUserDetailByPhone(unsigned long phone);
 
 	/*
 	* 根据uid更新用户认证信息
@@ -37,12 +37,12 @@ public:
 	/*
 	* 根据uid获取用户认证信息
 	*/
-	std::vector<UserAuth> getUserAuthByUid(unsigned int uid);
+	PtrUserAuth getUserAuthByUid(unsigned int uid);
 
 	/*
 	* 根据手机号获取用户认证信息
 	*/
-	std::vector<UserAuth> getUserAuthByPhone(unsigned long phone);
+	PtrUserAuth getUserAuthByPhone(unsigned long phone);
 
 	/*
 	* 添加快递员信息
@@ -52,7 +52,7 @@ public:
 	/*
 	* 根据uid获取快递员信息
 	*/
-	std::vector<CouriersInfo> getCourierInfo(unsigned int uid);
+	PtrCouriersInfo getCourierInfo(unsigned int uid);
 
 	/*
 	* 保存认证验证码
