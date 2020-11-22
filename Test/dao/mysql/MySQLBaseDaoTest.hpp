@@ -19,7 +19,7 @@ TEST(MySQLbaseDaoTest, executeQuery) {
 	MySQLBaseDao dao("127.0.0.1", 3306, "dev_leaf", "leaf", 10);
 	PtrResultSet result = dao.executeQuery("test_db",
 											"SELECT * FROM test_table WHERE id=?",
-											[](PtrPreParedStatement ptsm) {
+											[](PtrPreparedStatement ptsm) {
 													ptsm->setInt(1, 1); });
 	result->next();
 	EXPECT_EQ(1, result->getInt(1));

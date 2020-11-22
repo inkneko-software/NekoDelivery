@@ -22,13 +22,9 @@ TEST(NekoDeliveryUserDaoImplTest, registerTest) {
 	userDao->registerAccount(detail, userAuth);
 	*/
 	auto result = userDao->getUserDetailByUid(2);	
-	EXPECT_EQ(2, result.front().uid);
-	std::cout << "size: " << result.size() << std::endl;
-	for (auto row : result)
-	{
-		using namespace std;
-		cout << row.uid << endl;
-		cout << row.nick << endl;
-	}
-	EXPECT_STREQ(std::string(u8"罗小黑").c_str(), result.front().nick.c_str());
+	EXPECT_EQ(2, result->uid);
+	using namespace std;
+	cout << result->uid << endl;
+	cout << result->nick << endl;
+	EXPECT_STREQ(std::string(u8"罗小黑").c_str(), result->nick.c_str());
  }
