@@ -27,14 +27,28 @@ PtrAttribute NekoDeliverySession::getAttribute(unsigned long sessionId, std::str
 	PtrSessionToken session(sessionDao->getSessionToken(sessionId, sessionToken));
 	if (session != nullptr)
 	{
-		if (time(nullptr) > session->expire_time)
-		{ 
-			throw SessionExpiredException("会话已过期");
+		if (time(nullptr) < session->expire_time)
+		{
+			PtrSessionProperties sessionProperties(sessionDao->getSessionProperties(sessionId));
+			ret.reset(new nlohmann::json(nlohmann::json::parse(sessionProperties->serialized_text)));
 		}
-		PtrSessionProperties sessionProperties(sessionDao->getSessionProperties(sessionId));
-		ret.reset(new nlohmann::json(nlohmann::json::parse(sessionProperties->serialized_text)));
 	}
 	return ret;
+}
+
+PtrAttribute NekoDeliverySession::getAttribute(std::string sessionId, std::string sessionToken) noexcept(false)
+{
+	if (sessionId == "" || sessionToken != "")
+	{
+		return nullptr;
+	}
+	try
+	{
+		unsigned long sessionIdInt = std::stoul(sessionId);
+		return getAttribute(sessionIdInt, sessionToken);
+	}
+	catch (std::invalid_argument& e) {}
+	return nullptr;
 }
 
 bool NekoDeliverySession::saveAttribute(unsigned long sessionId, std::string sessionToken, Attribute& attribute)

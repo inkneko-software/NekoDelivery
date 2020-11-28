@@ -29,9 +29,15 @@ public:
 	/// <param name="sessionId">会话的id</param>
 	/// <param name="sessionToken">会话的令牌</param>
 	/// <returns>会话属性。获取失败返回nullptr</returns>
-	/// <throws exception-"SessionExpiredException">如果会话已过期则抛出本异常</throws>
 	PtrAttribute getAttribute(unsigned long sessionId, std::string sessionToken) noexcept(false);
 
+	/// <summary>
+	/// 获取会话的属性
+	/// </summary>
+	/// <param name="sessionId">会话id</param>
+	/// <param name="sessionToken">会话的令牌</param>
+	/// <returns>会话的属性。如果提供的值非法或者数据库中没有相应的记录，返回nullptr</returns>
+	PtrAttribute getAttribute(std::string sessionId, std::string sessionToken) noexcept(false);
 	/// <summary>
 	/// 保存会话
 	/// </summary>
