@@ -3,3 +3,7 @@
 
 ### 依赖
  - nekoHttpd
+ - libboost1.65-all-dev
+ - libmysqlcppconn-dev
+ - nlohmann/json.hpp
+ - googletest
