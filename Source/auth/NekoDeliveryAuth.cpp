@@ -338,96 +338,49 @@ HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::loginAccount(HTTPPacket::HTTPRe
 
 HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::resetPassword(HTTPPacket::HTTPRequestPacket request) noexcept
 {
-	HTTPPacket::HTTPResponsePacket response;
-	response.SetContentType("application/json; charset=utf8");
-	try
-	{
-		auto requestParams = webstring::ParseKeyValue(request.requestParam);
-		unsigned long phone = std::stoul(requestParams["phone"]);
-		std::string vcode = requestParams["vcode"];
-
-		std::vector<RecoverCode> records = userDao->getRecoverCode(phone,1);
-		time_t currentTime = time(nullptr);
-		bool passed = false;
-		for (auto& record : records)
-		{
-			if (currentTime - record.ctime < 5 * 60 * 1000l && vcode == record.vcode)
-			{
-				passed = true;
-				break;
-			}
-		}
-
-		if (passed)
-		{
-			auto userAuth = userDao->getUserAuthByPhone(phone);
-			if (userAuth == nullptr)
-			{
-				response.body = "{\"code\": -10005, \"msg\":\"用户不存在\"}";
-				return response;
-			}
-			userAuth->auth_salt = webstring::GenUUID() + webstring::GenTimeStamp();
-			userAuth->auth_hash = webstring::sha1(requestParams["password"]);
-			userAuth->auth_hash = webstring::sha1(userAuth->auth_salt + userAuth->auth_hash);
-			userDao->updateUserAuth(*userAuth);
-
-			response.body = "{\"code\": 0, \"msg\":\"重置密码成功\"}";
-			return response;
-		}
-		else
-		{
-			response.body = "{\"code\": -10010, \"msg\":\"重置验证码错误\"}";
-			return response;
-		}
-	}
-	catch (std::invalid_argument& e)
-	{
-		response.body = "{\"code\": -10001, \"msg\":\"手机号码格式错误\"}";
-		return response;
-	}
-	catch (const std::exception& e)
-	{
-		response.body = "{\"code\": -10500, \"msg\":\"服务端错误\"}";
-		return response;
-	}
+	return HTTPPacket::HTTPResponsePacket();
 }
 
 HTTPPacket::HTTPResponsePacket NekoDeliveryAuth::updateDetail(HTTPPacket::HTTPRequestPacket request) noexcept
 {
 	HTTPPacket::HTTPResponsePacket response;
-	response.SetContentType(HTTPPacket::ContentType::JSON);
 	try
 	{
 		std::string sessionId = request.GetCookieValue("sessionId");
 		std::string sessionToken = request.GetCookieValue("sessionToken");
-		PtrAttribute props = sessionManager->getAttribute(sessionId, sessionToken);
-		if (props == nullptr)
+		if (sessionId != "" && sessionToken != "")
 		{
-			response.body = "{\"code\": -10012, \"msg\":\"未登录\"}";
-			return response;
+			int sessionIdInt = 0;
+			try
+			{
+				sessionIdInt = std::stoul(sessionId);
+				PtrAttribute props(sessionManager->getAttribute(std::stoul(sessionId), sessionToken));
+				if (props != nullptr)
+				{
+					unsigned long uid = (*props)["uid"].get<unsigned long>();
+					response.body = "You are logged in.<br> Your uid is: " + std::to_string(uid);
+				}
+				else
+				{
+					response.body = "You are not logged in.";
+				}
+				
+			}
+			catch (std::invalid_argument &e)
+			{
+				response.body = "You are not logged in.";
+			}
 		}
-
-
-		auto requestParams = webstring::ParseKeyValue(request.requestParam);
-		PtrUserDetail userDetail = userDao->getUserDetailByUid((*props)["props"].get<unsigned int>());
-		std::string name = requestParams["name"];
-		std::string nick = requestParams["nick"];
-		if (name != "")
+		else
 		{
-			userDetail->name = name;
+			response.body = "You are not logged in.";
 		}
-		if (nick != "")
-		{
-			userDetail->nick = nick;
-		}
-		userDao->updateUserDetail(*userDetail);
-		response.body = "{\"code\": 0, \"msg\":\"更新成功\"}";
+		response.SetContentType("text/html; charset=UTF8");
 		return response;
 	}
-	catch (const std::exception& e)
+	catch (SessionExpiredException& e)
 	{
-		response.body = "{\"code\": -10500, \"msg\":\"服务端错误\"}";
-		return response;
+		std::cout << e.what() << std::endl;
 	}
 	response.SetResponseCode(HTTPPacket::ResponseCode::InternalServerError);
 	return response;
